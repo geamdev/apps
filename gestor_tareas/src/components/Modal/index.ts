@@ -1,1 +1,2 @@
-export { default as Modal } from "./Modal";
+export { default as ModalAdd } from "./ModalAdd";
+export { default as ModalEdit } from "./ModalEdit";

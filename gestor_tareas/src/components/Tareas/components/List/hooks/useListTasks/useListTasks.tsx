@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { Task } from "../../../../../../models";
 import { getTasks } from "../../../../../../services";
-const UseListTasks = () => {
+const useListTasks = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
@@ -21,4 +21,4 @@ const UseListTasks = () => {
   return { tasks };
 };
 
-export default UseListTasks;
+export default useListTasks;
