@@ -6,10 +6,10 @@ const useListTasks = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
-    fetchUsers();
+    fetchTasks();
   }, []);
 
-  const fetchUsers = async () => {
+  const fetchTasks = async () => {
     try {
       const response = await getTasks();
       setTasks(response.data);

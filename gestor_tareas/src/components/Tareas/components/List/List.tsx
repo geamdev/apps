@@ -1,14 +1,15 @@
 import { IconTrash } from "@tabler/icons-react";
 import { IconPencil } from "@tabler/icons-react";
+import { useDeleteTask, useEditTask } from "../../../Modal/hooks";
 
 import { useListTasks } from "./hooks";
-import { useEditTask } from "./hooks";
-import { useDeleteTask } from "./hooks";
 
 const List: React.FC = () => {
   const { tasks } = useListTasks();
-  const { openModal, renderModal } = useEditTask();
-  const { openModal: openModalDelete, renderModal: renderModalDelete } = useDeleteTask();
+  const {
+    openModal: openModalDelete,
+    renderModal: renderModalDelete
+  } = useDeleteTask();
 
   return (
     <div className="px-10">
@@ -88,19 +89,12 @@ const List: React.FC = () => {
               </td>
               <td className="px-6  py-4">
                 <div className="flex justify-end">
-                  <button
-                    onClick={() => openModal(task)}
-                    className="mr-2 px-4 py-4 text-sm font-bold leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-full active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue uppercase"
-                  >
+                  <button className="mr-2 px-4 py-4 text-sm font-bold leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-full active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue uppercase">
                     <IconPencil />
                   </button>
-                  {renderModal()}
-                  <button 
-                    onClick={() => openModalDelete(task)}
-                    className="mr-2 px-4 py-4 text-sm font-bold leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-full active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red-900 focus:ring-opacity-50 uppercase">
+                  <button className="mr-2 px-4 py-4 text-sm font-bold leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-full active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red-900 focus:ring-opacity-50 uppercase">
                     <IconTrash />
                   </button>
-                  {renderModalDelete()}
                 </div>
               </td>
             </tr>

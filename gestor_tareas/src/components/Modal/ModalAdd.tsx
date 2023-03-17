@@ -78,7 +78,7 @@ const ModalAdd: React.FC<ModalProps> = ({ children, isOpen, onClose }) => {
               />
             </div>
             <div className="flex items-center">
-            <button
+              <button
                 onClick={onClose}
                 type="button"
                 className="px-10 py-3 font-medium leading-5 text-gray-700 transition-colors duration-150 bg-white border border-gray-300 rounded-full active:bg-gray-50 hover:bg-gray-50 focus:outline-none focus:shadow-outline-gray"
