@@ -27,26 +27,6 @@ const ModalEdit: React.FC<ModalProps> = ({ children, isOpen, onClose }) => {
           maxHeight: "100%"
         }}
       >
-        <button
-          onClick={onClose}
-          type="button"
-          className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-          data-modal-hide="authentication-modal"
-        >
-          <svg
-            aria-hidden="true"
-            className="w-5 h-5"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </button>
         <div className="px-8 py-8 lg:px-9">
           <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
             Edit task
@@ -103,12 +83,19 @@ const ModalEdit: React.FC<ModalProps> = ({ children, isOpen, onClose }) => {
                 required
               />
             </div>
-            <div className="flex">
+            <div className="flex items-center justify-between">
+              <button
+                onClick={onClose}
+                type="button"
+                className="px-10 py-3 text-sm font-medium leading-5 text-gray-700 transition-colors duration-150 bg-white border border-gray-300 rounded-full active:bg-gray-50 hover:bg-gray-50 focus:outline-none focus:shadow-outline-gray"
+              >
+                Cancel
+              </button>
               <button
                 type="submit"
-                className="px-10 py-3 font-medium text-base text-center rounded-full border border-transparent active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue bg-blue-500 text-white ml-auto"
+                className="px-10 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-full active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue"
               >
-                Save task
+                Edit
               </button>
             </div>
           </form>
