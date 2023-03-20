@@ -7,6 +7,10 @@ import { useListTasks } from "./hooks";
 const List: React.FC = () => {
   const { tasks } = useListTasks();
   const {
+    openModal: openModalEdit,
+    renderModal: renderModalEdit
+  } = useEditTask();
+  const {
     openModal: openModalDelete,
     renderModal: renderModalDelete
   } = useDeleteTask();
@@ -89,12 +93,18 @@ const List: React.FC = () => {
               </td>
               <td className="px-6  py-4">
                 <div className="flex justify-end">
-                  <button className="mr-2 px-4 py-4 text-sm font-bold leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-full active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue uppercase">
+                  <button 
+                    onClick={() => openModalEdit()}
+                    className="mr-2 px-4 py-4 text-sm font-bold leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-full active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue uppercase">
                     <IconPencil />
                   </button>
-                  <button className="mr-2 px-4 py-4 text-sm font-bold leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-full active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red-900 focus:ring-opacity-50 uppercase">
+                  {renderModalEdit()}
+                  <button 
+                    onClick={() => openModalDelete()}
+                    className="mr-2 px-4 py-4 text-sm font-bold leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-full active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red-900 focus:ring-opacity-50 uppercase">
                     <IconTrash />
                   </button>
+                  {renderModalDelete()}
                 </div>
               </td>
             </tr>

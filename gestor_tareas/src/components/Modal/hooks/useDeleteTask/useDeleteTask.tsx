@@ -1,18 +1,21 @@
 import { useState } from "react";
-import { deleteTask } from "../../../../services";
+import Form from "../../../Tareas/components/Form";
+import ModalDelete from "../../ModalDelete";
 
 const useDeleteTask = () => {
-  const [error, setError] = useState("");
-
-  const handleDeleteTask = async (taskId: number) => {
-    try {
-      await deleteTask(taskId.toString());
-    } catch (err) {
-      setError(err.message);
+  const [open, setOpen] = useState<boolean>(false);
+  const openModal = () => setOpen(true);
+  
+  return {
+    openModal,
+    renderModal: () => {
+      return (
+        <ModalDelete isOpen={open} onClose={() => setOpen(false)}>
+          <Form />
+        </ModalDelete>
+      );
     }
   };
-
-  return { handleDeleteTask, error };
 };
 
 export default useDeleteTask;

@@ -10,7 +10,7 @@ const useListTasks = () => {
   }, []);
 
   const fetchTasks = async () => {
-    try {
+    try { 
       const response = await getTasks();
       setTasks(response.data);
     } catch (err) {

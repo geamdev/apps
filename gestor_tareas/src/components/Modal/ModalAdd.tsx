@@ -1,6 +1,11 @@
 import { useState } from "react";
+import { useAddTask } from "./hooks";
 import { ModalProps } from "./types";
+
+
 const ModalAdd: React.FC<ModalProps> = ({ children, isOpen, onClose }) => {
+  
+
   if (!isOpen) {
     return null;
   }

@@ -1,6 +1,36 @@
+import { useState, useEffect } from "react";
+
+import { deleteTask, getTasks } from "../../services";
+import { Task } from "../../models";
 import { ModalProps } from "./types";
 
+
 const ModalDelete: React.FC<ModalProps> = ({ children, isOpen, onClose }) => {
+
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await getTasks();
+        setTasks(response.data);
+      } catch (err) {
+        console.log("Error fetching tasks");
+      }
+    }
+    fetchData();
+  }, []);
+
+
+  const removeTask = async (id: number) => {
+    try {
+      await deleteTask(id.toString());
+      setTasks(tasks.filter((task) => task.id !== parseInt(id.toString()))); // actualiza la tarea eliminada
+    } catch (err) {
+      console.log("Error deleting task");
+    }
+  };
+
   if (!isOpen) {
     return null;
   }
@@ -36,6 +66,7 @@ const ModalDelete: React.FC<ModalProps> = ({ children, isOpen, onClose }) => {
                 Cancel
               </button>
               <button
+                onClick={ () => removeTask(1)}
                 type="submit"
                 className="px-10 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-full active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red"
               >
