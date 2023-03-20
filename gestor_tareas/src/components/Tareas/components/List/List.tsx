@@ -1,10 +1,19 @@
 import { IconTrash } from "@tabler/icons-react";
 import { IconPencil } from "@tabler/icons-react";
+import { useState } from "react";
 import { useDeleteTask, useEditTask } from "../../../Modal/hooks";
+import { Task } from "../../../../models";
 
 import { useListTasks } from "./hooks";
 
-const List: React.FC = () => {
+const List: React.FC<Task> = () => {
+
+  const [ id, setId ] = useState("");
+  const [ title, setTitle ] = useState("");
+  const [ completed, setCompleted ] = useState(false);
+  const [ status, setStatus ] = useState("");
+  const [ completionDate, setCompletionDate ] = useState("");
+  
   const { tasks } = useListTasks();
   const {
     openModal: openModalEdit,
@@ -41,7 +50,7 @@ const List: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {tasks.map(task =>
+          {tasks.map((task, id) =>
             <tr
               key={task.id}
               className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"

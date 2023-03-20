@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAddTask } from "./hooks";
 import { ModalProps } from "./types";
 
-
+// https://www.youtube.com/watch?v=fgQHjMotDPk
 const ModalAdd: React.FC<ModalProps> = ({ children, isOpen, onClose }) => {
   
 
@@ -40,8 +40,7 @@ const ModalAdd: React.FC<ModalProps> = ({ children, isOpen, onClose }) => {
               </label>
               <input
                 type="text"
-                name="title"
-                id="title"
+                id="nombre"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                 placeholder="Task title"
                 required
