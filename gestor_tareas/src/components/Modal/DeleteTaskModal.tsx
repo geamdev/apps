@@ -1,40 +1,33 @@
-import { useState, useEffect } from "react";
-
-import { deleteTask, getTasks } from "../../services";
+import { useState } from "react";
 import { Task } from "../../models";
-import { ModalProps } from "./types";
+import { deleteTask } from "../../services";
 
+interface Props {
+  task: Task | null;
+  onClose: () => void;
+  onDeleteTaskConfirm: () => void;
+}
 
-const ModalDelete: React.FC<ModalProps> = ({ children, isOpen, onClose }) => {
+const DeleteTaskModal = ({ task, onClose, onDeleteTaskConfirm }: Props) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const handleDelete = async () => {
+    if (!task) return;
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+    setIsLoading(true);
+    setError("");
 
-  const fetchData = async () => {
     try {
-      const response = await getTasks();
-      setTasks(response.data);
-    } catch (err) {
-      console.log("Error fetching tasks");
-    }
-  }
-
-  const removeTask = async (taskId: string) => {
-    try {
-      await deleteTask(taskId);
-      setTasks(tasks.filter((task) => task.id !== parseInt(taskId))); // actualiza la tarea eliminada
-    } catch (err) {
-      console.log("Error deleting task");
+      await deleteTask(task.id);
+      onDeleteTaskConfirm();
+    } catch (e:any) {
+      setError(e.message);
+    } finally {
+      setIsLoading(false);
     }
   };
-  
 
-  if (!isOpen) {
-    return null;
-  }
   return (
     <div
       className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center z-50 overflow-auto bg-black bg-opacity-50"
@@ -60,26 +53,27 @@ const ModalDelete: React.FC<ModalProps> = ({ children, isOpen, onClose }) => {
             </div>
             <div className="flex items-center justify-between">
               <button
-                onClick={onClose}
                 type="button"
                 className="px-10 py-3 text-sm font-medium leading-5 text-gray-700 transition-colors duration-150 bg-white border border-gray-300 rounded-full active:bg-gray-50 hover:bg-gray-50 focus:outline-none focus:shadow-outline-gray"
+                onClick={onClose}
               >
                 Cancel
               </button>
               <button
-                onClick={() => removeTask('1')}
-                type="submit"
+                type="button"
                 className="px-10 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-full active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red"
+                onClick={handleDelete}
+                disabled={isLoading}
               >
-                Delete
+              {isLoading ? "Deleting..." : "Delete"}
               </button>
-
             </div>
+            {error && <div className="text-red-500 mt-2">{error}</div>}
           </form>
         </div>
       </div>
     </div>
-
   );
 };
-export default ModalDelete;
+
+export default DeleteTaskModal;

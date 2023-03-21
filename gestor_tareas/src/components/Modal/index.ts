@@ -1,3 +1,3 @@
-export { default as ModalAdd } from "./ModalAdd";
-export { default as ModalEdit } from "./ModalEdit";
-export { default as ModalDelete } from "./ModalDelete";
+export { default as AddTaskModal } from "./AddTaskModal";
+export { default as EditTaskModal } from "./EditTaskModal"
+export { default as DeleteTaskModal } from "./DeleteTaskModal"

@@ -1,20 +1,32 @@
-import { useState } from "react";
-import ModalAdd from "../../../../../Modal/ModalAdd";
-import Form from "../../../Form";
 
-const useCreateTask = () => {
-  const [open, setOpen] = useState<boolean>(false);
-  const openModal = () => setOpen(true);
-  return {
-    openModal,
-    renderModal: () => {
-      return (
-        <ModalAdd isOpen={open} onClose={() => setOpen(false)}>
-          <Form />
-        </ModalAdd>
-      );
-    }
+import { useState, useEffect } from "react";
+import axiosInstance from "../../../../../../config/axios";
+import { Task } from "../../../../../../models";
+
+type UseCreateTaskProps = {
+  createTask: (task: Task) => Promise<void>;
+};
+
+const useCreateTask = (): UseCreateTaskProps => {
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const { data } = await axiosInstance.get("/tasks");
+      setTasks(data);
+    };
+    fetchTasks();
+  }, []);
+
+  const createTask = async (newTask: Task) => {
+    const updatedTasks = [...tasks, newTask];
+    setTasks(updatedTasks);
+
+    await axiosInstance.post("/tasks", newTask);
   };
+
+  return { createTask };
 };
 
 export default useCreateTask;
+

@@ -1,125 +1,106 @@
-import { IconTrash } from "@tabler/icons-react";
-import { IconPencil } from "@tabler/icons-react";
 import { useState } from "react";
-import { useDeleteTask, useEditTask } from "../../../Modal/hooks";
 import { Task } from "../../../../models";
+import { TaskRow } from "./components";
+import useGetTasks from "./hooks/useGetTasks";
+import { DeleteTaskModal, EditTaskModal } from "../../../Modal";
 
-import { useListTasks } from "./hooks";
+const List = () => {
+  const { tasks, isLoading, refetch, deleteTask, updateTask } = useGetTasks();
 
-const List: React.FC<Task> = () => {
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const [ id, setId ] = useState("");
-  const [ title, setTitle ] = useState("");
-  const [ completed, setCompleted ] = useState(false);
-  const [ status, setStatus ] = useState("");
-  const [ completionDate, setCompletionDate ] = useState("");
+  const handleEditTask = (task: Task) => {
+    setSelectedTask(task);
+    setIsEditModalOpen(true);
+  };
+
+  const handleDeleteTask = (task: Task) => {
+    setSelectedTask(task);
+    setIsDeleteModalOpen(true);   
+  };
+
+  const handleEditModalClose = () => {
+    setSelectedTask(selectedTask ?? null);
+    setIsEditModalOpen(false);
+  };
   
-  const { tasks } = useListTasks();
-  const {
-    openModal: openModalEdit,
-    renderModal: renderModalEdit
-  } = useEditTask();
-  const {
-    openModal: openModalDelete,
-    renderModal: renderModalDelete
-  } = useDeleteTask();
+  const handleDeleteModalClose = () => {
+    setSelectedTask(selectedTask ?? null);
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleUpdateTask = async (updatedTask: Task) => {
+    if (selectedTask !== null) {
+      await updateTask(updatedTask);
+      refetch();
+      handleEditModalClose();
+    }
+  }    
+
+  const handleDeleteTaskConfirm = async () => {
+    if (selectedTask) {
+      await deleteTask(selectedTask!.id.toString());
+      refetch();
+      handleDeleteModalClose();
+    }
+  };
 
   return (
     <div className="px-10">
-      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
-            <th scope="col" className="px-6 py-3">
-              Id
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Title
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Completed
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Estatus
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Completion Date
-            </th>
-            <th scope="col" className="px-6 py-3 w-20">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {tasks.map((task, id) =>
-            <tr
-              key={task.id}
-              className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-            >
-              <td className="px-6 py-4">
-                <div className="flex items-center">
-                  <div>
-                    <p className="font-semibold text-gray-700 dark:text-gray-200">
-                      {task.id}
-                    </p>
-                  </div>
-                </div>
-              </td>
-              <td className="px-6 py-4">
-                <div className="flex items-center">
-                  <div>
-                    <p className="font-semibold text-gray-700 dark:text-gray-200">
-                      {task.title}
-                    </p>
-                  </div>
-                </div>
-              </td>
-              <td className="px-6 py-4">
-                <div className="flex items-center">
-                  <div>
-                    <p className="font-semibold text-gray-700 dark:text-gray-200">
-                      {task.completed ? "Yes" : "No"}
-                    </p>
-                  </div>
-                </div>
-              </td>
-              <td className="px-6 py-4">
-                <div className="flex items-center">
-                  <div>
-                    <p className="font-semibold text-gray-700 dark:text-gray-200">
-                      {task.status}
-                    </p>
-                  </div>
-                </div>
-              </td>
-              <td className="px-6 py-4">
-                <div className="flex items-center">
-                  <div>
-                    <p className="font-semibold text-gray-700 dark:text-gray-200">
-                      {task.completionDate}
-                    </p>
-                  </div>
-                </div>
-              </td>
-              <td className="px-6  py-4">
-                <div className="flex justify-end">
-                  <button 
-                    onClick={() => openModalEdit()}
-                    className="mr-2 px-4 py-4 text-sm font-bold leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-full active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue uppercase">
-                    <IconPencil />
-                  </button>
-                  {renderModalEdit()}
-                  <button 
-                    onClick={() => openModalDelete()}
-                    className="mr-2 px-4 py-4 text-sm font-bold leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-full active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red-900 focus:ring-opacity-50 uppercase">
-                    <IconTrash />
-                  </button>
-                  {renderModalDelete()}
-                </div>
-              </td>
+      {isLoading && <p>Loading...</p>}
+      {!isLoading && tasks.length === 0 && <p>No tasks found.</p>}
+      {!isLoading && tasks.length > 0 && (
+        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" className="px-6 py-3">
+                ID
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Title
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Status
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Created At
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Completed At
+              </th>
+              <th scope="col" className="px-6 py-3 w-20">
+                Actions
+              </th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {tasks.map((task) => (
+              <TaskRow
+                key={task.id}
+                task={task}
+                onEditTask={() => handleEditTask(task)}
+                onDeleteTask={() => handleDeleteTask(task)}
+              />
+            ))}
+          </tbody>
+        </table>
+      )}
+      {isEditModalOpen && (
+        <EditTaskModal
+          task={selectedTask}
+          onClose={handleEditModalClose}
+          onUpdateTask={handleUpdateTask}
+        />
+      )}
+      {isDeleteModalOpen && (
+        <DeleteTaskModal
+          task={selectedTask}
+          onClose={handleDeleteModalClose}
+          onDeleteTaskConfirm={handleDeleteTaskConfirm}
+        />
+      )}
     </div>
   );
 };
