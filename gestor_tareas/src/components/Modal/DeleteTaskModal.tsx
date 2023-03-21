@@ -8,7 +8,7 @@ interface Props {
   onDeleteTaskConfirm: () => void;
 }
 
-const DeleteTaskModal = ({ task, onClose, onDeleteTaskConfirm }: Props) => {
+const DeleteTaskModal = ({ task, onClose, onDeleteTaskConfirm  }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 

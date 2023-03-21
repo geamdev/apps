@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Task, TaskStatus } from "../../models";
 import { updateTask } from "../../services";
 
@@ -6,14 +6,32 @@ interface Props {
   task: Task;
   onClose: () => void;
   onUpdateTask: (updatedTask: Task) => void;
-  onTaskUpdated: () => void;
+  setIsOpen: (isOpen: boolean) => void;
+  selectedTask: Task | null;
 }
 
-const EditTaskModal: React.FC<Props> = ({ task, onClose, onUpdateTask, onTaskUpdated }) => {
+const EditTaskModal: React.FC<Props> = ({ 
+  task, 
+  onClose, 
+  selectedTask, 
+  onUpdateTask, 
+  setIsOpen 
+}) => {
   const [title, setTitle] = useState(task?.title ?? "");
   const [status, setStatus] = useState<TaskStatus>(task?.status ?? TaskStatus.PENDING);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    // Agregar la clase "overflow-hidden" al elemento "body" al abrir la modal
+    document.body.classList.add("overflow-hidden");
+
+    // Eliminar la clase "overflow-hidden" al elemento "body" al cerrar la modal
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+      window.scrollTo(0, 0); // 4. Vuelve a desplazarte a la parte superior
+    };
+  }, []); 
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -41,12 +59,13 @@ const EditTaskModal: React.FC<Props> = ({ task, onClose, onUpdateTask, onTaskUpd
 
     try {
       await updateTask(updatedTask);
-      onTaskUpdated();
+      onUpdateTask(updatedTask);
     } catch (e: any) {
       setError(e.message);
     } finally {
       setIsLoading(false);
     }
+    setIsOpen(false);
   }
   const parseStatus = (value: string): TaskStatus => {
     switch (value) {
@@ -69,7 +88,7 @@ const EditTaskModal: React.FC<Props> = ({ task, onClose, onUpdateTask, onTaskUpd
       }}
     >
       <div
-        className="relative bg-white rounded-lg shadow dark:bg-gray-700"
+        className="relative bg-white rounded-lg shadow dark:bg-gray-700"  
         style={{
           width: "600px",
           height: "340px",

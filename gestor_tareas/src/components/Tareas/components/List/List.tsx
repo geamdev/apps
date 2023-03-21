@@ -3,6 +3,7 @@ import { Task } from "../../../../models";
 import { TaskRow } from "./components";
 import useGetTasks from "./hooks/useGetTasks";
 import { DeleteTaskModal, EditTaskModal } from "../../../Modal";
+import { Spinner } from "../../../Spinner";
 
 const List = () => {
   const { tasks, isLoading, refetch, deleteTask, updateTask } = useGetTasks();
@@ -27,7 +28,7 @@ const List = () => {
   };
   
   const handleDeleteModalClose = () => {
-    setSelectedTask(selectedTask ?? null);
+    setSelectedTask(selectedTask ?? null); 
     setIsDeleteModalOpen(false);
   };
 
@@ -49,7 +50,7 @@ const List = () => {
 
   return (
     <div className="px-10">
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <Spinner />}
       {!isLoading && tasks.length === 0 && <p>No tasks found.</p>}
       {!isLoading && tasks.length > 0 && (
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -92,6 +93,7 @@ const List = () => {
           task={selectedTask}
           onClose={handleEditModalClose}
           onUpdateTask={handleUpdateTask}
+          setIsOpen={setIsEditModalOpen}
         />
       )}
       {isDeleteModalOpen && (

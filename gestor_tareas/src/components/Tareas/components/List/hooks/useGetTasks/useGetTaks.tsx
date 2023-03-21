@@ -5,6 +5,7 @@ import { deleteTask, getTasks, updateTask } from "../../../../../../services";
 type UseGetTasksReturnType = {
   tasks: Task[];
   isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
   refetch: () => void;
   deleteTask: (taskId: string) => Promise<void>; // Agregar esta propiedad
   updateTask: (task: Task) => Promise<void>;
@@ -37,7 +38,7 @@ const useGetTasks = (): UseGetTasksReturnType => {
     fetchTasks();
   }, []);
 
-  return { tasks, isLoading, refetch: fetchTasks, deleteTask: deleteTaskById, updateTask: updateTaskById };
+  return { tasks, isLoading, setIsLoading, refetch: fetchTasks, deleteTask: deleteTaskById, updateTask: updateTaskById };
 };
 
 export default useGetTasks;
