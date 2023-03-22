@@ -4,9 +4,13 @@ import { useCreateTask } from "./hooks";
 
 const Header = () => {
   const { createTask } = useCreateTask();
+  const [task, setTask] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCreateTask = async (taskTitle: string) => {
+    if (taskTitle.trim() === "") {
+      return;
+    }
     const newTask = {
       userId: 1,
       title: taskTitle,
@@ -17,6 +21,7 @@ const Header = () => {
     };
     await createTask(newTask);
     setIsModalOpen(false);
+    window.location.reload();
   };
 
   return (

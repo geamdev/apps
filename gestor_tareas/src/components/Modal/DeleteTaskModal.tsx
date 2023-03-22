@@ -20,14 +20,15 @@ const DeleteTaskModal = ({ task, onClose, onDeleteTaskConfirm  }: Props) => {
 
     try {
       await deleteTask(task.id);
+      onClose();
       onDeleteTaskConfirm();
-    } catch (e:any) {
-      setError(e.message);
+    } catch (error: any) {
+      setError(error.message);
     } finally {
       setIsLoading(false);
     }
   };
-
+  
   return (
     <div
       className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center z-50 overflow-auto bg-black bg-opacity-50"

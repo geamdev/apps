@@ -12,8 +12,7 @@ interface Props {
 
 const EditTaskModal: React.FC<Props> = ({ 
   task, 
-  onClose, 
-  selectedTask, 
+  onClose,
   onUpdateTask, 
   setIsOpen 
 }) => {
@@ -23,13 +22,11 @@ const EditTaskModal: React.FC<Props> = ({
   const [error, setError] = useState("");
 
   useEffect(() => {
-    // Agregar la clase "overflow-hidden" al elemento "body" al abrir la modal
     document.body.classList.add("overflow-hidden");
 
-    // Eliminar la clase "overflow-hidden" al elemento "body" al cerrar la modal
     return () => {
       document.body.classList.remove("overflow-hidden");
-      window.scrollTo(0, 0); // 4. Vuelve a desplazarte a la parte superior
+      window.scrollTo(0, 0);
     };
   }, []); 
 
@@ -44,7 +41,7 @@ const EditTaskModal: React.FC<Props> = ({
     setIsLoading(true);
     setError("");
 
-    // Validar el valor de "status"
+    // Validar el valor de status
     if (!["pendiente", "en proceso", "finalizado"].includes(status)) {
       setError("Status inválido");
       setIsLoading(false);

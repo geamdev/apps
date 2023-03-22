@@ -1,9 +1,10 @@
 import { useState } from "react";
+
+import { DeleteTaskModal, EditTaskModal } from "../../../Modal";
+import useGetTasks from "./hooks/useGetTasks";
+import { PuffLoader } from "react-spinners";
 import { Task } from "../../../../models";
 import { TaskRow } from "./components";
-import useGetTasks from "./hooks/useGetTasks";
-import { DeleteTaskModal, EditTaskModal } from "../../../Modal";
-import { Spinner } from "../../../Spinner";
 
 const List = () => {
   const { tasks, isLoading, refetch, deleteTask, updateTask } = useGetTasks();
@@ -42,7 +43,7 @@ const List = () => {
 
   const handleDeleteTaskConfirm = async () => {
     if (selectedTask) {
-      await deleteTask(selectedTask!.id.toString());
+      await deleteTask(selectedTask.id.toString());
       refetch();
       handleDeleteModalClose();
     }
@@ -50,7 +51,11 @@ const List = () => {
 
   return (
     <div className="px-10">
-      {isLoading && <Spinner />}
+      {isLoading && (
+        <div className="flex justify-center items-center h-screen">
+          <PuffLoader color="#1976d2" />
+        </div>
+      )}
       {!isLoading && tasks.length === 0 && <p>No tasks found.</p>}
       {!isLoading && tasks.length > 0 && (
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">

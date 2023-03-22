@@ -7,7 +7,7 @@ type UseGetTasksReturnType = {
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
   refetch: () => void;
-  deleteTask: (taskId: string) => Promise<void>; // Agregar esta propiedad
+  deleteTask: (taskId: string) => Promise<void>; 
   updateTask: (task: Task) => Promise<void>;
 };
 
